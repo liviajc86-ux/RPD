@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Registro de Pensamentos e Ação Comprometida</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    background: #F2F5F6;
+    color: #1F2D36;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .serif { font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif; }
+
+  .wrap { max-width: 820px; margin: 0 auto; padding: 0 20px; }
+
+  /* ---------- Cabeçalho ---------- */
+  .top {
+    background: #FFFFFF;
+    border-bottom: 1px solid #D5DEE2;
+    padding: 44px 0 36px;
+  }
+  .top h1 {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    font-weight: 600;
+    font-size: 34px;
+    line-height: 1.2;
+    color: #1F3B47;
+    letter-spacing: -0.2px;
+    margin-bottom: 10px;
+  }
+  .top p.lead { color: #5B6B75; font-size: 17px; max-width: 560px; }
+
+  .intro {
+    margin-top: 28px;
+    background: #EAF1F3;
+    border-radius: 12px;
+    padding: 22px 24px;
+  }
+  .intro h2 {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    font-size: 19px;
+    font-weight: 600;
+    color: #1F3B47;
+    margin-bottom: 10px;
+  }
+  .intro ul { padding-left: 20px; color: #33454F; }
+  .intro li { margin-bottom: 4px; }
+  .intro .privacy {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid #C9D9DE;
+    font-size: 14.5px;
+    color: #4A5B65;
+  }
+
+  .name-row { margin-top: 24px; max-width: 420px; }
+
+  /* ---------- Campos ---------- */
+  label.lbl, .lbl {
+    display: block;
+    font-size: 15px;
+    font-weight: 500;
+    color: #1F2D36;
+    margin-bottom: 6px;
+  }
+
+  input[type="text"], input[type="email"], input[type="date"], input[type="time"], textarea {
+    width: 100%;
+    font-family: inherit;
+    font-size: 16px;
+    line-height: 1.55;
+    color: #1F2D36;
+    background: #FBFCFC;
+    border: 1px solid #C5D1D6;
+    border-radius: 8px;
+    padding: 11px 13px;
+    transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+  }
+  textarea {
+    resize: vertical;
+    min-height: 96px;
+    overflow: hidden;
+    display: block;
+  }
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: #2F6B7A;
+    background: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(47,107,122,0.18);
+  }
+  ::placeholder { color: #93A1A8; }
+
+  /* ---------- Registros ---------- */
+  #records { margin-top: 32px; }
+
+  .record {
+    background: #FFFFFF;
+    border: 1px solid #D5DEE2;
+    border-top: 5px solid #2F6B7A;
+    border-radius: 14px;
+    padding: 28px 28px 12px;
+    margin-bottom: 28px;
+    box-shadow: 0 1px 2px rgba(31,59,71,0.05);
+  }
+
+  .rec-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 16px 20px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid #E1E8EB;
+    margin-bottom: 8px;
+  }
+  .rec-title {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: #1F3B47;
+    line-height: 1.1;
+    margin-right: auto;
+  }
+  .rec-when { display: flex; gap: 14px; flex-wrap: wrap; }
+  .rec-when label { display: block; font-size: 14px; font-weight: 500; color: #4A5B65; }
+  .rec-when input { margin-top: 4px; min-width: 150px; }
+
+  .block { padding: 24px 0; border-bottom: 1px solid #EDF1F3; }
+  .block:last-of-type { border-bottom: none; }
+
+  .block-title { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+  .badge {
+    flex: 0 0 auto;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #2F6B7A;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .block-title h3 {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1F3B47;
+    line-height: 1.3;
+  }
+  .hint { color: #66767F; font-size: 14.5px; margin: 0 0 16px 42px; }
+
+  .field { margin-left: 42px; margin-bottom: 16px; }
+  .field:last-child { margin-bottom: 0; }
+
+  .sub {
+    margin-left: 42px;
+    background: #F4F8F9;
+    border: 1px solid #E1EAED;
+    border-radius: 10px;
+    padding: 16px 18px 18px;
+    margin-bottom: 14px;
+  }
+  .sub .tag {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: #2F6B7A;
+    margin-bottom: 8px;
+  }
+  .sub textarea { background: #FFFFFF; }
+
+  .frase {
+    margin-left: 42px;
+    margin-top: 6px;
+    background: #F4F8F9;
+    border: 1px solid #E1EAED;
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .frase .cap { font-size: 14px; color: #66767F; margin-bottom: 10px; }
+  .frase-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 10px;
+    font-size: 17px;
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  }
+  .frase-line input { flex: 1 1 170px; min-width: 0; background: #FFFFFF; }
+
+  .rec-foot { display: flex; justify-content: flex-end; padding: 14px 0 12px; }
+  .link-btn {
+    background: none;
+    border: none;
+    font-family: inherit;
+    font-size: 14px;
+    color: #7A8A92;
+    cursor: pointer;
+    padding: 10px 6px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    min-height: 44px;
+  }
+  .link-btn:hover { color: #A14B4B; }
+
+  /* ---------- Botões ---------- */
+  .btn {
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 10px;
+    border: 1px solid #2F6B7A;
+    background: #2F6B7A;
+    color: #FFFFFF;
+    padding: 12px 20px;
+    min-height: 48px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .btn:hover { background: #265866; border-color: #265866; }
+  .btn.ghost { background: #FFFFFF; color: #2F6B7A; }
+  .btn.ghost:hover { background: #EAF1F3; }
+  .btn.danger { background: #FFFFFF; color: #8E4141; border-color: #D9B8B8; }
+  .btn.danger:hover { background: #F8EEEE; }
+  .btn:focus-visible, .link-btn:focus-visible {
+    outline: 3px solid rgba(47,107,122,0.45);
+    outline-offset: 2px;
+  }
+
+  .add-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: #FFFFFF;
+    color: #2F6B7A;
+    border: 2px dashed #8FB1BA;
+    border-radius: 14px;
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: 500;
+    padding: 20px;
+    min-height: 64px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .add-btn .plus { font-size: 28px; line-height: 1; font-weight: 400; }
+  .add-btn:hover { background: #EAF1F3; border-color: #2F6B7A; }
+  .add-btn:focus-visible { outline: 3px solid rgba(47,107,122,0.45); outline-offset: 2px; }
+
+  /* ---------- Salvar e compartilhar ---------- */
+  .share {
+    margin-top: 44px;
+    background: #FFFFFF;
+    border: 1px solid #D5DEE2;
+    border-radius: 14px;
+    padding: 26px 28px 28px;
+  }
+  .share h2 {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: #1F3B47;
+    margin-bottom: 6px;
+  }
+  .share p.sm { color: #5B6B75; font-size: 15px; margin-bottom: 18px; }
+  .share .row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
+  .share .email-box {
+    background: #F4F8F9;
+    border: 1px solid #E1EAED;
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 22px;
+  }
+  .share .email-box .row { margin-bottom: 0; margin-top: 14px; }
+  .share .vis { font-size: 14px; color: #5B6B75; margin-top: 12px; }
+  .status { min-height: 24px; font-size: 14.5px; color: #2F6B7A; margin-top: 10px; }
+  .share .reset { border-top: 1px solid #E8EDEF; padding-top: 20px; }
+
+  footer.note {
+    text-align: center;
+    color: #7A8A92;
+    font-size: 13.5px;
+    padding: 28px 20px 48px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  /* ---------- Confirmação ---------- */
+  .overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(24,40,48,0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 50;
+  }
+  .overlay.open { display: flex; }
+  .dialog {
+    background: #FFFFFF;
+    border-radius: 14px;
+    max-width: 420px;
+    width: 100%;
+    padding: 26px;
+    box-shadow: 0 18px 50px rgba(0,0,0,0.25);
+  }
+  .dialog h3 {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    font-size: 21px;
+    color: #1F3B47;
+    margin-bottom: 8px;
+  }
+  .dialog p { color: #4A5B65; margin-bottom: 22px; }
+  .dialog .row { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+
+
+  /* ---------- Página inicial ---------- */
+  .welcome {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: #F2F5F6;
+    z-index: 100;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    display: block;
+  }
+  .welcome.hidden { display: none; }
+  .welcome-inner { max-width: 640px; margin: 0 auto; padding: 48px 20px 56px; }
+  .welcome-card {
+    background: #FFFFFF;
+    border: 1px solid #D5DEE2;
+    border-top: 5px solid #2F6B7A;
+    border-radius: 14px;
+    padding: 36px 32px 32px;
+    box-shadow: 0 1px 2px rgba(31,59,71,0.05);
+  }
+  .welcome h1 {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 1.2;
+    color: #1F3B47;
+    margin-bottom: 12px;
+  }
+  .welcome .lead { color: #4A5B65; font-size: 17px; margin-bottom: 26px; }
+  .welcome h2 {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    font-size: 19px;
+    font-weight: 600;
+    color: #1F3B47;
+    margin-bottom: 10px;
+  }
+  .welcome ul { padding-left: 20px; color: #33454F; margin-bottom: 24px; }
+  .welcome li { margin-bottom: 6px; }
+  .welcome .privacy {
+    background: #EAF1F3;
+    border-radius: 10px;
+    padding: 16px 18px;
+    font-size: 15px;
+    color: #33454F;
+    margin-bottom: 28px;
+  }
+  .welcome .privacy strong { color: #1F3B47; }
+  .welcome .start { width: 100%; font-size: 17px; }
+  @media (max-width: 600px) {
+    .welcome-inner { padding: 20px 14px 40px; }
+    .welcome-card { padding: 26px 20px 24px; }
+    .welcome h1 { font-size: 26px; }
+  }
+
+  /* ---------- Impressão ---------- */
+  .print-only { display: none; }
+
+  @media (max-width: 600px) {
+    .wrap { padding: 0 14px; }
+    .top { padding: 32px 0 28px; }
+    .top h1 { font-size: 28px; }
+    .record { padding: 20px 16px 6px; border-radius: 12px; }
+    .rec-title { font-size: 23px; width: 100%; }
+    .rec-when { width: 100%; }
+    .rec-when label { flex: 1 1 140px; }
+    .rec-when input { min-width: 0; }
+    .hint, .field, .sub, .frase { margin-left: 0; }
+    .block-title h3 { font-size: 18.5px; }
+    .share { padding: 22px 16px; }
+    .share .row .btn { flex: 1 1 100%; }
+    .dialog .row .btn { flex: 1 1 100%; }
+  }
+
+  @media print {
+    @page { margin: 16mm 14mm; }
+    body { background: #FFFFFF; font-size: 12pt; }
+    .no-print, .top .lead, .intro, .share, footer.note, .overlay, .welcome { display: none !important; }
+    .print-only { display: block; }
+    .top { border: none; padding: 0 0 10px; }
+    .top h1 { font-size: 22pt; }
+    .wrap { max-width: none; padding: 0; }
+    #records { margin-top: 12px; }
+    .record {
+      box-shadow: none;
+      border: 1px solid #9DB0B7;
+      border-top: 4px solid #2F6B7A;
+      padding: 16px 16px 4px;
+      margin-bottom: 18px;
+    }
+    .block { page-break-inside: avoid; padding: 14px 0; }
+    .rec-head { page-break-after: avoid; }
+    input, textarea {
+      border: none !important;
+      border-bottom: 1px solid #B9C6CB !important;
+      border-radius: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      padding: 4px 0 !important;
+      resize: none;
+    }
+    .sub, .frase { background: #FFFFFF; }
+    .name-row { margin-top: 6px; }
+    .name-row input { border: none !important; padding: 0 !important; font-weight: 600; }
+    .name-row .lbl { display: none; }
+    .rec-when input { min-width: 0; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="welcome" id="welcome" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
+  <div class="welcome-inner">
+    <div class="welcome-card">
+      <h1 id="welcomeTitle">Registro de Pensamentos e Ação Comprometida</h1>
+      <p class="lead">Este é um espaço para observar a sua experiência, no seu ritmo e com as suas palavras.</p>
+
+      <h2>Como usar</h2>
+      <ul>
+        <li>Cada quadro é <strong>uma situação específica</strong> que você viveu.</li>
+        <li>A <strong>data</strong> e o <strong>horário</strong> indicam quando ela aconteceu.</li>
+        <li>Para registrar uma nova situação, use o botão <strong>＋ Adicionar novo registro</strong>.</li>
+        <li>Você pode fazer vários registros no mesmo dia ou em dias diferentes.</li>
+        <li>Responda do seu jeito. Não existem respostas certas ou erradas, e você pode pular o que não quiser preencher.</li>
+        <li>Quando quiser, você pode imprimir, salvar em PDF ou enviar o seu registro para a sua psicóloga.</li>
+      </ul>
+
+      <div class="privacy">
+        <strong>Sobre a sua privacidade.</strong> O que você escreve fica salvo somente neste navegador, neste aparelho. Nada é enviado a ninguém, a menos que você escolha compartilhar.
+      </div>
+
+      <button type="button" class="btn start" id="startBtn">Começar</button>
+    </div>
+  </div>
+</div>
+
+
+<header class="top">
+  <div class="wrap">
+    <h1>Registro de Pensamentos e Ação Comprometida</h1>
+    <p class="lead">Um espaço para observar a sua experiência, no seu ritmo e com as suas palavras.</p>
+
+
+    <div class="print-only" id="printDate" style="margin-top:6px;font-size:11pt;color:#4A5B65;"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="records"></div>
+
+  <button type="button" class="add-btn no-print" id="addBtn">
+    <span class="plus" aria-hidden="true">＋</span>
+    <span>Adicionar novo registro</span>
+  </button>
+
+  <section class="share no-print" aria-labelledby="salvar">
+    <h2 id="salvar">Salvar e compartilhar</h2>
+    <p class="sm">Ao imprimir ou salvar em PDF, os botões e os controles de edição não aparecem no documento.</p>
+
+    <div class="row">
+      <button type="button" class="btn" id="printBtn">Imprimir ou salvar em PDF</button>
+      <button type="button" class="btn ghost" id="downloadBtn">Baixar como texto (.txt)</button>
+      <button type="button" class="btn ghost" id="copyBtn">Copiar texto</button>
+    </div>
+
+    <div class="email-box">
+      <label class="lbl" for="email">Enviar para a minha psicóloga</label>
+      <input type="email" id="email" inputmode="email" autocomplete="email" placeholder="E-mail da psicóloga">
+      <div class="row">
+        <button type="button" class="btn" id="sendBtn">Enviar por e-mail</button>
+      </div>
+      <p class="vis">Se o seu aplicativo de e-mail não abrir, copie o texto ou baixe o arquivo e envie para: <strong id="emailVis"></strong></p>
+    </div>
+
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+
+  </section>
+</main>
+
+<footer class="note no-print">
+  Este material é uma ferramenta de apoio ao seu processo terapêutico e não substitui o acompanhamento profissional.
+</footer>
+
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="dlgTitle">
+  <div class="dialog">
+    <h3 id="dlgTitle"></h3>
+    <p id="dlgText"></p>
+    <div class="row">
+      <button type="button" class="btn ghost" id="dlgCancel">Cancelar</button>
+      <button type="button" class="btn danger" id="dlgOk"></button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var KEY = 'registro-pensamentos-acao-comprometida-v1';
+  var DEFAULT_EMAIL = 'liviajc86@sou.unilavras.edu.br';
+  var TITLE = 'Registro de Pensamentos e Ação Comprometida';
+
+  var SECTIONS = [
+    {
+      n: 1, title: 'Situação / Gatilho',
+      fields: [{ key: 'situacao', q: 'O que estava acontecendo quando o desconforto surgiu?', rows: 4 }]
+    },
+    {
+      n: 2, title: 'Pensamento / Ruído Mental',
+      fields: [{ key: 'pensamento', q: 'O que estava passando pela sua mente naquele momento?', rows: 4 }]
+    },
+    {
+      n: 3, title: 'Reação Automática Habitual',
+      fields: [{ key: 'reacao', q: 'O que você percebeu que teve vontade de fazer ou fez diante dessa experiência?', rows: 4 }]
+    },
+    {
+      n: 4, title: 'Pausa de Desfusão & Valores',
+      subs: [
+        { key: 'desfusao', tag: 'Desfusão', q: 'Como você pode observar esse pensamento ou experiência sem precisar agir imediatamente a partir dela?', rows: 4 },
+        { key: 'valores', tag: 'Valores', q: 'O que é importante para você nesta situação ou nesta área da sua vida?', rows: 4 }
+      ]
+    },
+    {
+      n: 5, title: 'Ação Comprometida',
+      fields: [{ key: 'acao', q: 'Qual é uma ação que você pode escolher realizar agora, alinhada ao que é importante para você?', rows: 4 }],
+      frase: true
+    },
+    {
+      n: 6, title: 'Aprendizado / Pós-Ação',
+      lead: 'O que você percebeu ou aprendeu depois de realizar essa ação?',
+      fields: [
+        { key: 'aconteceu', q: 'O que aconteceu?', rows: 3 },
+        { key: 'sentiu', q: 'Como você se sentiu?', rows: 3 },
+        { key: 'percebeu', q: 'O que percebeu sobre seus pensamentos, sentimentos ou comportamentos?', rows: 3 },
+        { key: 'levar', q: 'O que gostaria de levar dessa experiência?', rows: 3 }
+      ]
+    }
+  ];
+
+  /* ---------- Estado ---------- */
+  var state = { nome: '', email: DEFAULT_EMAIL, records: [] };
+  var nextId = 1;
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (raw) {
+        var s = JSON.parse(raw);
+        if (s && s.records && s.records.length) {
+          state = s;
+          if (!state.email) state.email = DEFAULT_EMAIL;
+        }
+      }
+    } catch (e) { /* armazenamento indisponível */ }
+    for (var i = 0; i < state.records.length; i++) {
+      if (state.records[i].id >= nextId) nextId = state.records[i].id + 1;
+    }
+  }
+
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* ignorar */ }
+  }
+
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+  function newRecord() {
+    var d = new Date();
+    return {
+      id: nextId++,
+      data: d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()),
+      hora: pad(d.getHours()) + ':' + pad(d.getMinutes())
+    };
+  }
+
+  /* ---------- Construção dos quadros ---------- */
+  function fieldHTML(f, id, cls) {
+    var fid = f.key + '_' + id;
+    return '<div class="' + (cls || 'field') + '">' +
+      (f.tag ? '<div class="tag">' + f.tag + '</div>' : '') +
+      '<label class="lbl" for="' + fid + '">' + f.q + '</label>' +
+      '<textarea id="' + fid + '" data-key="' + f.key + '" rows="' + (f.rows || 3) + '"></textarea>' +
+      '</div>';
+  }
+
+  function cardHTML(rec) {
+    var id = rec.id;
+    var h = '';
+    h += '<div class="rec-head">';
+    h += '<h2 class="rec-title">Registro <span class="rec-num"></span></h2>';
+    h += '<div class="rec-when">';
+    h += '<label for="data_' + id + '">Data<input type="date" id="data_' + id + '" data-key="data"></label>';
+    h += '<label for="hora_' + id + '">Horário<input type="time" id="hora_' + id + '" data-key="hora"></label>';
+    h += '</div></div>';
+
+    for (var i = 0; i < SECTIONS.length; i++) {
+      var s = SECTIONS[i];
+      h += '<section class="block">';
+      h += '<div class="block-title"><span class="badge" aria-hidden="true">' + s.n + '</span><h3>' + s.title + '</h3></div>';
+      if (s.lead) h += '<p class="field" style="font-weight:500;">' + s.lead + '</p>';
+      var j;
+      if (s.subs) {
+        for (j = 0; j < s.subs.length; j++) h += fieldHTML(s.subs[j], id, 'sub');
+      }
+      if (s.fields) {
+        for (j = 0; j < s.fields.length; j++) h += fieldHTML(s.fields[j], id, 'field');
+      }
+      if (s.frase) {
+        h += '<div class="frase"><div class="cap">Se quiser, complete a frase:</div>' +
+          '<div class="frase-line"><span>Eu vou</span>' +
+          '<input type="text" data-key="euVou" aria-label="Eu vou">' +
+          '<span>, mesmo com</span>' +
+          '<input type="text" data-key="mesmoCom" aria-label="mesmo com">' +
+          '<span>presente.</span></div></div>';
+      }
+      h += '</section>';
+    }
+
+    h += '<div class="rec-foot no-print"><button type="button" class="link-btn" data-action="remove">Remover este registro</button></div>';
+    return h;
+  }
+
+  function autosize(el) {
+    el.style.height = 'auto';
+    var min = el.rows ? 0 : 96;
+    el.style.height = Math.max(el.scrollHeight + 2, min) + 'px';
+  }
+
+  function buildCard(rec) {
+    var el = document.createElement('article');
+    el.className = 'record';
+    el.setAttribute('data-id', rec.id);
+    el.innerHTML = cardHTML(rec);
+    var inputs = el.querySelectorAll('[data-key]');
+    for (var i = 0; i < inputs.length; i++) {
+      var k = inputs[i].getAttribute('data-key');
+      if (rec[k]) inputs[i].value = rec[k];
+    }
+    return el;
+  }
+
+  function sizeAll() {
+    var tas = document.querySelectorAll('#records textarea');
+    for (var i = 0; i < tas.length; i++) autosize(tas[i]);
+  }
+
+  function renumber() {
+    var nums = document.querySelectorAll('#records .rec-num');
+    for (var i = 0; i < nums.length; i++) nums[i].textContent = i + 1;
+  }
+
+  function findRec(id) {
+    for (var i = 0; i < state.records.length; i++) if (state.records[i].id === id) return i;
+    return -1;
+  }
+
+  function renderAll() {
+    var box = document.getElementById('records');
+    box.innerHTML = '';
+    for (var i = 0; i < state.records.length; i++) box.appendChild(buildCard(state.records[i]));
+    renumber();
+    sizeAll();
+  }
+
+  function addRecord(focus) {
+    var rec = newRecord();
+    state.records.push(rec);
+    var card = buildCard(rec);
+    document.getElementById('records').appendChild(card);
+    renumber();
+    sizeAll();
+    save();
+    if (focus) {
+      card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      var first = card.querySelector('textarea');
+      if (first) setTimeout(function () { first.focus({ preventScroll: true }); }, 350);
+    }
+  }
+
+  /* ---------- Confirmação ---------- */
+  var pendingOk = null;
+  function confirmBox(title, text, okLabel, cb) {
+    document.getElementById('dlgTitle').textContent = title;
+    document.getElementById('dlgText').textContent = text;
+    document.getElementById('dlgOk').textContent = okLabel;
+    pendingOk = cb;
+    document.getElementById('overlay').className = 'overlay open';
+    document.getElementById('dlgCancel').focus();
+  }
+  function closeBox() {
+    document.getElementById('overlay').className = 'overlay';
+    pendingOk = null;
+  }
+
+  /* ---------- Texto para compartilhar ---------- */
+  function fmtDate(iso) {
+    if (!iso) return '(sem data)';
+    var p = iso.split('-');
+    return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : iso;
+  }
+
+  function buildText() {
+    var L = [];
+    L.push(TITLE);
+    L.push('');
+    for (var r = 0; r < state.records.length; r++) {
+      var rec = state.records[r];
+      L.push('==============================');
+      L.push('REGISTRO ' + (r + 1));
+      L.push('Data: ' + fmtDate(rec.data) + '   Horário: ' + (rec.hora || '(sem horário)'));
+      L.push('==============================');
+      for (var i = 0; i < SECTIONS.length; i++) {
+        var s = SECTIONS[i];
+        L.push('');
+        L.push(s.n + '. ' + s.title);
+        var list = (s.subs || []).concat(s.fields || []);
+        for (var j = 0; j < list.length; j++) {
+          var f = list[j];
+          L.push((f.tag ? f.tag + ' - ' : '') + f.q);
+          L.push(rec[f.key] ? rec[f.key] : '-');
+        }
+        if (s.frase) {
+          L.push('Eu vou ' + (rec.euVou || '________') + ', mesmo com ' + (rec.mesmoCom || '________') + ' presente.');
+        }
+      }
+      L.push('');
+    }
+    return L.join('\n');
+  }
+
+  function setStatus(msg) {
+    var el = document.getElementById('status');
+    el.textContent = msg;
+  }
+
+  function downloadText() {
+    var blob = new Blob([buildText()], { type: 'text/plain;charset=utf-8' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'registro-pensamentos-e-acao-comprometida.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1500);
+  }
+
+  function copyText(done) {
+    var text = buildText();
+    function fallback() {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.top = '0';
+      ta.style.left = '0';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      done(ok);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { done(true); }, fallback);
+    } else {
+      fallback();
+    }
+  }
+
+  function sendEmail() {
+    var to = (state.email || '').trim();
+    if (!to) {
+      setStatus('Escreva o e-mail da psicóloga no campo acima para continuar.');
+      document.getElementById('email').focus();
+      return;
+    }
+    var subject = TITLE;
+    var body = buildText();
+    var url = 'mailto:' + encodeURIComponent(to) + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    if (url.length > 1800) {
+      downloadText();
+      var short = 'Segue em anexo o meu registro (arquivo .txt baixado neste aparelho).';
+      url = 'mailto:' + encodeURIComponent(to) + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(short);
+      setStatus('Seu registro é longo. O arquivo foi baixado: anexe-o ao e-mail que vai abrir.');
+    } else {
+      setStatus('Abrindo o seu aplicativo de e-mail...');
+    }
+    window.location.href = url;
+  }
+
+  /* ---------- Eventos ---------- */
+  function init() {
+    load();
+    if (!state.records.length) state.records.push(newRecord());
+
+    var welcome = document.getElementById('welcome');
+    var startBtn = document.getElementById('startBtn');
+    document.body.style.overflow = 'hidden';
+    startBtn.addEventListener('click', function () {
+      welcome.className = 'welcome hidden';
+      document.body.style.overflow = '';
+      window.scrollTo(0, 0);
+    });
+    startBtn.focus();
+
+    var email = document.getElementById('email');
+    var emailVis = document.getElementById('emailVis');
+    email.value = state.email || '';
+    emailVis.textContent = state.email || DEFAULT_EMAIL;
+
+    renderAll();
+    save();
+
+    email.addEventListener('input', function () {
+      state.email = email.value;
+      emailVis.textContent = email.value || DEFAULT_EMAIL;
+      save();
+    });
+
+    var box = document.getElementById('records');
+    box.addEventListener('input', function (e) {
+      var t = e.target;
+      var key = t.getAttribute && t.getAttribute('data-key');
+      if (!key) return;
+      var card = t.closest('.record');
+      var idx = findRec(parseInt(card.getAttribute('data-id'), 10));
+      if (idx < 0) return;
+      state.records[idx][key] = t.value;
+      if (t.tagName === 'TEXTAREA') autosize(t);
+      save();
+    });
+
+    box.addEventListener('click', function (e) {
+      var btn = e.target.closest ? e.target.closest('[data-action="remove"]') : null;
+      if (!btn) return;
+      var card = btn.closest('.record');
+      var id = parseInt(card.getAttribute('data-id'), 10);
+      confirmBox('Remover este registro?', 'Apenas este quadro será apagado. Os outros registros continuam como estão.', 'Remover', function () {
+        var idx = findRec(id);
+        if (idx >= 0) state.records.splice(idx, 1);
+        if (card.parentNode) card.parentNode.removeChild(card);
+        if (!state.records.length) addRecord(false);
+        renumber();
+        save();
+      });
+    });
+
+    document.getElementById('addBtn').addEventListener('click', function () { addRecord(true); });
+
+    document.getElementById('printBtn').addEventListener('click', function () { window.print(); });
+    document.getElementById('downloadBtn').addEventListener('click', function () {
+      downloadText();
+      setStatus('Arquivo baixado.');
+    });
+    document.getElementById('copyBtn').addEventListener('click', function () {
+      copyText(function (ok) {
+        setStatus(ok ? 'Texto copiado. Agora é só colar onde quiser.' : 'Não foi possível copiar. Tente baixar o arquivo.');
+      });
+    });
+    document.getElementById('sendBtn').addEventListener('click', sendEmail);
+
+    document.getElementById('dlgCancel').addEventListener('click', closeBox);
+    document.getElementById('dlgOk').addEventListener('click', function () {
+      var cb = pendingOk;
+      closeBox();
+      if (cb) cb();
+    });
+    document.getElementById('overlay').addEventListener('click', function (e) {
+      if (e.target === this) closeBox();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeBox();
+    });
+
+    function beforePrint() {
+      sizeAll();
+      var d = new Date();
+      document.getElementById('printDate').textContent = 'Impresso em ' + pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + d.getFullYear();
+    }
+    window.addEventListener('beforeprint', beforePrint);
+    window.addEventListener('resize', sizeAll);
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
